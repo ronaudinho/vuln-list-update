@@ -19,11 +19,14 @@ import (
 )
 
 const (
-	repoURL   = "https://git.launchpad.net/ubuntu-cve-tracker"
 	ubuntuDir = "ubuntu"
 )
 
 var (
+	repoURLs = []string{
+		"https://git.launchpad.net/ubuntu-cve-tracker",
+		"git://git.launchpad.net/ubuntu-cve-tracker",
+	}
 	targets = []string{
 		"active",
 		"ignored",
@@ -72,8 +75,20 @@ type Status struct {
 func Update() error {
 	gc := git.Config{}
 	dir := filepath.Join(utils.CacheDir(), "ubuntu-cve-tracker")
-	if _, err := gc.CloneOrPull(repoURL, dir, "master", false); err != nil {
-		return xerrors.Errorf("failed to clone or pull: %w", err)
+	// try both https and git
+	for i, url := range repoURLs {
+		_, err := gc.CloneOrPull(url, dir, "master", false)
+		if i < len(repoURLs)-1 {
+			if err != nil {
+				log.Printf("failed to clone or pull: %s: %w", url, err)
+				continue
+			} else {
+				break
+			}
+		}
+		if err != nil {
+			return xerrors.Errorf("failed to clone or pull: %s: %w", url, err)
+		}
 	}
 
 	log.Println("Walking Ubuntu...")
