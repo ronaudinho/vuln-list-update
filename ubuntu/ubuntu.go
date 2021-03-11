@@ -80,7 +80,7 @@ func Update() error {
 		_, err := gc.CloneOrPull(url, dir, "master", false)
 		if i < len(repoURLs)-1 {
 			if err != nil {
-				log.Printf("failed to clone or pull: %s: %w", url, err)
+				log.Printf("failed to clone or pull: %s: %v", url, err)
 				continue
 			} else {
 				break

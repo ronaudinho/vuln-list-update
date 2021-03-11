@@ -1,6 +1,5 @@
-name: Update vuln-list repo: Ubuntu
+name: Update vuln-list repo - Ubuntu
 on: push
-
 jobs:
   update:
     name: Update repo vuln-list
