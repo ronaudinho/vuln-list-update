@@ -93,6 +93,7 @@ func Update() error {
 
 	log.Println("Walking Ubuntu...")
 	for _, target := range targets {
+		log.Printf("walking Ubuntu: %s ...", target)
 		if err := walkDir(filepath.Join(dir, target)); err != nil {
 			return err
 		}

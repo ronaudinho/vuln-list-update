@@ -26,6 +26,7 @@ func (gc Config) CloneOrPull(url, repoPath, branch string, debug bool) (map[stri
 		return nil, err
 	}
 
+	trimURL := url[strings.Index(url, "@")+1:]
 	updatedFiles := map[string]struct{}{}
 	if exists {
 		if debug {
@@ -33,7 +34,7 @@ func (gc Config) CloneOrPull(url, repoPath, branch string, debug bool) (map[stri
 			return nil, nil
 		}
 
-		log.Println("git pull")
+		log.Printf("git pull %s into %s", trimURL, repoPath)
 		files, err := pull(url, repoPath, branch)
 		if err != nil {
 			return nil, xerrors.Errorf("git pull error: %w", err)
@@ -46,6 +47,8 @@ func (gc Config) CloneOrPull(url, repoPath, branch string, debug bool) (map[stri
 		if err = os.MkdirAll(repoPath, 0700); err != nil {
 			return nil, err
 		}
+
+		log.Printf("git clone %s into %s", trimURL, repoPath)
 		if err := clone(url, repoPath); err != nil {
 			return nil, err
 		}
