@@ -188,12 +188,12 @@ func run() error {
 	if err != nil {
 		return xerrors.Errorf("git status error: %w", err)
 	}
-
 	// only last_updated.json
 	if len(files) < 2 {
 		log.Println("Skip commit and push")
 		return nil
 	}
+	log.Printf("%d files to commit", len(files))
 
 	log.Println("git commit")
 	if err = gc.Commit(utils.VulnListDir(), "./", commitMsg); err != nil {

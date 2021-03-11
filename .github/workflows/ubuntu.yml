@@ -21,8 +21,8 @@ jobs:
 
     - name: Setup github user email and name
       run: |
-        git config --global user.email "action@github.com"
-        git config --global user.name "GitHub Action"
+        git config --global user.email "$GITHUB_ACTOR"
+        git config --global user.name "$GITHUB_ACTOR@users.noreply.github.com"
 
     - name: Compile vuln-list-update
       run: go build -o vuln-list-update .
